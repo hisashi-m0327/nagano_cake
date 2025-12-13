@@ -1,1 +1,20 @@
 @use '~bootstrap/scss/bootstrap';
+
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-left: -60px;
+  margin-bottom: 16px;
+}
+
+.form-label {
+  width: 200px;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.form-input {
+  margin-left: 60px;
+  flex: 1;
+}
