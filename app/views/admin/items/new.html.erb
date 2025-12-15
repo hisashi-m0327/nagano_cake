@@ -1,0 +1,65 @@
+<div class="signup-container d-flex justify-content-center align-items-center" style="padding-top: 50px;">
+  <div class="signup-form">
+
+    <h3 class="mb-4">商品新規登録</h3>
+
+    <%= form_with model: @item, url: admin_items_path, local: true do |f| %>
+
+
+      <div class="field form-row">
+        <%= f.label :image, "商品画像", class: "form-label" %>
+        <div class="form-input">
+          <%= f.file_field :image, accept: "image/*" %>
+        </div>
+      </div>
+
+
+      <div class="field form-row">
+        <%= f.label :name, "商品名", class: "form-label" %>
+        <div class="form-input">
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+      </div>
+
+
+      <div class="field form-row">
+        <%= f.label :introduction, "商品説明", class: "form-label" %>
+        <div class="form-input">
+          <%= f.text_area :introduction, rows: 4, class: "form-control" %>
+        </div>
+      </div>
+
+
+      <div class="field form-row">
+        <%= f.label :price, "税抜価格", class: "form-label" %>
+        <div class="form-input d-flex align-items-center">
+          <%= f.number_field :price, class: "form-control", style: "max-width: 200px;" %>
+          <span class="ms-2">（円）</span>
+        </div>
+      </div>
+
+
+
+      <div class="field form-row">
+        <%= f.label :is_active, "販売ステータス", class: "form-label" %>
+        <div class="form-input">
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :is_active, true, checked: true, class: "form-check-input" %>
+            <%= f.label :is_active_true, "販売中", class: "form-check-label" %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :is_active, false, class: "form-check-input" %>
+            <%= f.label :is_active_false, "販売停止中", class: "form-check-label" %>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="text-center mt-4">
+        <%= f.submit "新規登録", class: "btn btn-success px-5" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+

@@ -1,0 +1,29 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3>商品一覧</h3>
+
+  <%= link_to "新規登録", new_admin_item_path,
+      class: "btn btn-success" %>
+</div>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>商品名</th>
+      <th>価格</th>
+      <th>販売ステータス</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= item.name %></td>
+        <td><%= item.price %>円</td>
+        <td>
+          <%= item.is_active ? "販売中" : "販売停止" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
