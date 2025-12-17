@@ -31,9 +31,22 @@
       </div>
 
       <div class="form-row">
-        <label class="form-label">税抜価格</label>
-        <div class="form-input"><%= @item.price %> 円</div>
+        <label class="form-label">
+          税込価格<br>
+          <span>(税抜価格)</span>
+        </label>
+
+        <div class="form-input d-flex align-items-center">
+          <span>
+            <%= number_with_delimiter(@item.price_with_tax) %> 円
+          </span>
+
+          <span class="ms-2">
+            （<%= number_with_delimiter(@item.price) %> 円）
+          </span>
+        </div>
       </div>
+
 
       <div class="form-row">
         <label class="form-label">販売ステータス</label>
