@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  namespace :public do
+    get 'addresses/index'
+  end
   namespace :admin do
     get 'items/index'
     get 'items/show'
@@ -33,12 +36,9 @@ Rails.application.routes.draw do
     resource :customers, only: [:show, :edit, :update]
     resource :cart_items, only: [:index, :update, :destroy]
     resources :items,  only: [:index, :show]
+    resources :addresses, only: [:index, :create, :edit, :update, :destroy]
+    resources :orders, only: [:index, :show]
   end
-
-  resources :items, only: [:index, :show]
-  resources :addresses, only: [:index]
-  resources :orders, only: [:index, :show]
-  
 
 end
 
