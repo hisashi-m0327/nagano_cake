@@ -1,0 +1,42 @@
+<div class="container mt-5">
+  <div class="row">
+
+    <div class="col-md-5 text-center">
+      <% if @item.image.attached? %>
+        <%= image_tag @item.image, class: "img-fluid", size: "300x300" %>
+      <% else %>
+        <p>画像はありません</p>
+      <% end %>
+    </div>
+
+    <div class="col-md-7">
+      <h3><%= @item.name %></h3>
+      <p><%= @item.introduction %></p>
+      
+      <p class="fw-bold">
+        <span class="price-large"><%= number_with_delimiter(@item.price_with_tax) %></span> 円（税込）
+      </p>
+
+
+      <%= form_with url: public_cart_items_path, method: :post, local: true do |f| %>
+        <div class="container">
+          <div class="row g-2 align-items-center">
+            
+            <div class="col-auto">
+              <%= f.select :quantity,options_for_select([["個数選択", ""]] + (1..10).map { |n| [n, n] }),{},class: "form-select form-select-lg" %>
+            </div>
+
+            <div class="col-auto">
+              <%= f.hidden_field :item_id, value: @item.id %>
+              <%= f.submit "カートに入れる", class: "btn btn-success" %>
+            </div>
+
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>
+
