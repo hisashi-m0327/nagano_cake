@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <h3 class="mb-4 text-center">登録情報編集</h3>
+
+  <%= form_with model: @customer,
+        url: public_customers_path,
+        local: true do |f| %>
+
+    <table class="table">
+      <tr>
+        <th>氏名</th>
+        <td class="d-flex gap-2">
+          <%= f.text_field :last_name, class: "form-control w-50" %>
+          <%= f.text_field :first_name, class: "form-control w-50" %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>フリガナ</th>
+        <td class="d-flex gap-2">
+          <%= f.text_field :last_name_kana, class: "form-control w-50" %>
+          <%= f.text_field :first_name_kana, class: "form-control w-50" %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>郵便番号</th>
+        <td>
+          <%= f.text_field :postal_code, class: "form-control w-50" %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>住所</th>
+        <td>
+          <%= f.text_field :address, class: "form-control" %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>電話番号</th>
+        <td>
+          <%= f.text_field :telephone_number, class: "form-control w-50" %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>メールアドレス</th>
+        <td>
+          <%= f.email_field :email, class: "form-control" %>
+        </td>
+      </tr>
+    </table>
+
+    <div class="text-center mt-4">
+      <%= f.submit "変更を保存", class: "btn btn-success px-5 me-3" %>
+    </div>
+
+  <% end %>
+</div>

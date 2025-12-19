@@ -23,12 +23,12 @@
           <div class="row g-2 align-items-center">
             
             <div class="col-auto">
-              <%= f.select :quantity,options_for_select([["個数選択", ""]] + (1..10).map { |n| [n, n] }),{},class: "form-select form-select-lg" %>
+              <%= f.select :amount,options_for_select([["個数選択", ""]] + (1..10).map { |n| [n, n] }),class: "form-select form-select-lg" %>
             </div>
 
             <div class="col-auto">
               <%= f.hidden_field :item_id, value: @item.id %>
-              <%= f.submit "カートに入れる", class: "btn btn-success" %>
+              <%= f.submit "カートに入れる", class: "btn btn-primary" %>
             </div>
 
           </div>

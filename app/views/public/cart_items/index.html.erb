@@ -1,0 +1,107 @@
+<div class="container mt-5">
+
+  <!-- 見出し + カートを空にする -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">ショッピングカート</h3>
+
+    <%= link_to "カートを空にする",
+        destroy_all_public_cart_items_path,
+        method: :delete,
+        data: { confirm: "カート内の商品をすべて削除しますか？" },
+        class: "btn btn-outline-danger" %>
+  </div>
+
+  <!-- カート一覧テーブル -->
+  <table class="table table-bordered align-middle">
+    <thead class="table-light text-center">
+      <tr>
+        <th>商品</th>
+        <th>単価（税込）</th>
+        <th>数量</th>
+        <th>小計</th>
+        <th>削除</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @cart_items.each do |cart_item| %>
+        <tr>
+
+          <!-- 商品画像 + 商品名 -->
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <% if cart_item.item.image.attached? %>
+                <%= image_tag cart_item.item.image, size: "120x90" %>
+              <% end %>
+
+              <%= link_to cart_item.item.name,
+                  public_item_path(cart_item.item),
+                  class: "text-decoration-none" %>
+            </div>
+          </td>
+
+          <!-- 単価（税込） -->
+          <td class="text-center">
+            <%= number_with_delimiter(cart_item.item.price_with_tax) %> 円
+          </td>
+
+          <!-- 数量（セレクト + 変更ボタン） -->
+          <td class="text-center">
+            <%= form_with model: cart_item,
+                url: public_cart_item_path(cart_item),
+                method: :patch,
+                local: true do |f| %>
+
+              <div class="d-flex justify-content-center align-items-center gap-2">
+                <%= f.select :amount,
+                    (1..10).to_a,
+                    {},
+                    class: "form-select w-auto" %>
+
+                <%= f.submit "変更",
+                    class: "btn btn-success btn-sm" %>
+              </div>
+
+            <% end %>
+          </td>
+
+          <!-- 小計 -->
+          <td class="text-center">
+            <%= number_with_delimiter(cart_item.subtotal) %> 円
+          </td>
+
+          <!-- 削除 -->
+          <td class="text-center">
+            <%= link_to "削除",
+                public_cart_item_path(cart_item),
+                method: :delete,
+                data: { confirm: "本当に削除しますか？" },
+                class: "btn btn-danger btn-sm" %>
+          </td>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <!-- 下部操作エリア -->
+  <div class="d-flex justify-content-between align-items-center mt-4">
+
+    <!-- 買い物を続ける -->
+    <%= link_to "買い物を続ける",
+        public_items_path,
+        class: "btn btn-outline-primary" %>
+
+    <!-- 合計金額 -->
+    <h4 class="mb-0">
+      合計金額：
+      <span class="fw-bold">
+        <%= number_with_delimiter(@total) %> 円
+      </span>
+    </h4>
+
+  </div>
+
+</div>
+
+
