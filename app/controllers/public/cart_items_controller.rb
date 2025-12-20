@@ -10,11 +10,9 @@ class Public::CartItemsController < ApplicationController
     cart_item = current_customer.cart_items.find_by(item_id: params[:item_id])
 
     if cart_item
-      # すでに存在する場合は数量を加算
       cart_item.amount += params[:amount].to_i
       cart_item.save
     else
-      # 新規追加
       cart_item = current_customer.cart_items.new(cart_item_params)
       cart_item.save
     end
