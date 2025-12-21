@@ -40,9 +40,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :orders, only: [:new, :create, :show] do
+      post :confirm, on: :collection
+    end
+
     resources :items,  only: [:index, :show]
     resources :addresses, only: [:index, :create, :edit, :update, :destroy]
-    resources :orders, only: [:index, :show, :new, :create]
   end
 end
 

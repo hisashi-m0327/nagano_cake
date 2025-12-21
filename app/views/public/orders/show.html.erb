@@ -1,0 +1,105 @@
+<div class="container">
+  <h2 class="mb-4">注文情報確認</h2>
+
+  <!-- 上段：商品一覧 ＋ 金額 -->
+  <div class="row">
+    <!-- 左：商品一覧 -->
+    <div class="col-md-8">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>商品名</th>
+            <th>単価（税込）</th>
+            <th>数量</th>
+            <th>小計</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order_details.each do |detail| %>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <% if detail.item.image.attached? %>
+                    <%= image_tag detail.item.image,size: "70x70",class: "me-3 img-fluid" %>
+                  <% else %>
+                    <%= image_tag "no_image.jpg",size: "70x70",class: "me-3 img-fluid" %>
+                  <% end %>
+
+                  <span><%= detail.item.name %></span>
+                </div>
+              </td>
+
+              <td><%= number_with_delimiter(detail.price) %> 円</td>
+              <td><%= detail.amount %></td>
+              <td>
+                <%= number_with_delimiter(detail.price * detail.amount) %> 円
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+
+
+      </table>
+    </div>
+
+
+    <div class="col-md-4">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>送料</th>
+            <td><%= number_with_delimiter(@order.postage) %> 円</td>
+          </tr>
+          <tr>
+            <th>商品合計</th>
+            <td>
+              <%= number_with_delimiter(
+                    @order.billing_amount - @order.postage
+                  ) %> 円
+            </td>
+          </tr>
+          <tr>
+            <th>請求金額</th>
+            <td>
+              <%= number_with_delimiter(@order.billing_amount) %> 円
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 下段：支払方法・お届け先 -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h4>支払方法</h4>
+      <p>
+        <%= @order.payment_method_i18n %>
+      </p>
+    </div>
+
+    <div class="col-md-6">
+      <h4>お届け先</h4>
+      <p>
+        〒<%= @order.postal_code %><br>
+        <%= @order.address %><br>
+        <%= @order.name %>
+      </p>
+    </div>
+  </div>
+
+  <!-- 注文確定 -->
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <%= form_with model: @order, url: public_orders_path, method: :post do |f| %>
+        <%= f.hidden_field :payment_method %>
+        <%= f.hidden_field :postal_code %>
+        <%= f.hidden_field :address %>
+        <%= f.hidden_field :name %>
+
+        <%= f.submit "注文を確定する", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>
