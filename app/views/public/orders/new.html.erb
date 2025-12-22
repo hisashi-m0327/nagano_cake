@@ -2,7 +2,7 @@
 
   <h3 class="mb-4">注文情報入力</h3>
 
-  <%= form_with model: @order, url: public_orders_path, local: true do |f| %>
+  <%= form_with model: @order, url: confirm_public_orders_path, method: :post, local: true do |f| %>
 
     <!-- 支払方法 -->
     <div class="mb-4">
