@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :orders, only: [:index, :show, :update]
+    resources :order_details, only: [:update]
     resources :items,  only: [:index, :show, :new, :create, :edit, :update]
     resources :customers, only: [:index, :show, :edit, :update]
     resources :genres, only: [:index, :create, :edit, :update]
@@ -40,7 +41,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :orders, only: [:new, :create, :show] do
+    resources :orders, only: [:new, :create, :show, :index] do
       collection do
         post :confirm
       end  

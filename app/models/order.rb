@@ -12,4 +12,8 @@ class Order < ApplicationRecord
     preparing_shipment: 3,
     shipped: 4
   }
+
+  after_initialize do
+    self.status ||= "waiting_for_payment"
+  end
 end

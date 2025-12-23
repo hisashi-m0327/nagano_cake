@@ -6,12 +6,12 @@
   <table class="table table-bordered mb-4">
     <tbody>
       <tr>
-        <th style="width: 25%">購入日時</th>
-        <td><%= @order.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+        <th>購入者</th>
+        <td><%= @order.customer.name %></td>
       </tr>
       <tr>
-        <th>注文者</th>
-        <td><%= @order.customer.name %></td>
+        <th>注文日</th>
+        <td><%= @order.created_at.strftime("%Y/%m/%d") %></td>
       </tr>
       <tr>
         <th>配送先</th>
@@ -27,56 +27,76 @@
       </tr>
       <tr>
         <th>注文ステータス</th>
-        <td><%= @order.status_i18n %></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- 注文商品一覧 -->
-  <table class="table table-bordered">
-    <thead class="table-light">
-      <tr>
-        <th>商品名</th>
-        <th>単価（税込）</th>
-        <th>数量</th>
-        <th>小計</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @order_details.each do |detail| %>
-        <tr>
-          <td><%= detail.item.name %></td>
-          <td><%= number_with_delimiter(detail.price) %> 円</td>
-          <td><%= detail.amount %></td>
-          <td>
-            <%= number_with_delimiter(detail.price * detail.amount) %> 円
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <!-- 金額 -->
-  <table class="table table-bordered mt-4">
-    <tbody>
-      <tr>
-        <th>商品合計</th>
         <td>
-          <%= number_with_delimiter(
-                @order.billing_amount - @order.postage
-              ) %> 円
+          <%= form_with model: @order, url: admin_order_path(@order), method: :patch, local: true do |f| %>
+            <div class="d-flex">
+              <%= f.select :status, Order.statuses_i18n.invert, {}, class: "form-select w-50" %>
+              <%= f.submit "更新", class: "btn btn-primary ms-2" %>
+            </div>
+          <% end %>
         </td>
       </tr>
-      <tr>
-        <th>送料</th>
-        <td><%= number_with_delimiter(@order.postage) %> 円</td>
-      </tr>
-      <tr>
-        <th>請求金額</th>
-        <td><%= number_with_delimiter(@order.billing_amount) %> 円</td>
-      </tr>
     </tbody>
   </table>
 
+  <!-- 商品 + 金額 -->
+  <div class="row">
+    <!-- 左：商品一覧 -->
+    <div class="col-md-8">
+      <table class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>商品名</th>
+            <th>単価（税込）</th>
+            <th>数量</th>
+            <th>小計</th>
+            <th>製作ステータス</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @order_details.each do |detail| %>
+            <tr>
+              <td><%= detail.item.name %></td>
+              <td><%= number_with_delimiter(detail.price) %> 円</td>
+              <td><%= detail.amount %></td>
+              <td><%= number_with_delimiter(detail.price * detail.amount) %> 円</td>
+              <td>
+                <%= form_with model: detail, url: admin_order_detail_path(detail), method: :patch, local: true do |f| %>
+                  <div class="d-flex">
+                    <%= f.select :making_status,
+                          OrderDetail.making_statuses_i18n.invert,
+                          {}, class: "form-select" %>
+                    <%= f.submit "更新", class: "btn btn-primary ms-2" %>
+                  </div>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 右：金額 -->
+    <div class="col-md-4">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>商品合計</th>
+            <td><%= number_with_delimiter(@order.billing_amount - @order.postage) %> 円</td>
+          </tr>
+          <tr>
+            <th>送料</th>
+            <td><%= number_with_delimiter(@order.postage) %> 円</td>
+          </tr>
+          <tr>
+            <th>請求金額合計</th>
+            <td><%= number_with_delimiter(@order.billing_amount) %> 円</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
+

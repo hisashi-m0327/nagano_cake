@@ -1,6 +1,11 @@
 class Public::OrdersController < ApplicationController
   before_action :authenticate_customer!
 
+  def index
+    @orders = current_customer.orders.includes(:order_details).order(created_at: :desc)
+  end
+
+
   def new
     @order = Order.new
     @addresses = current_customer.addresses
@@ -11,28 +16,29 @@ class Public::OrdersController < ApplicationController
     @cart_items = current_customer.cart_items.includes(:item)
 
     case params[:order][:address_option]
-    when "own"
-      @order.postal_code = current_customer.postal_code
-      @order.address     = current_customer.address
-      @order.name        = "#{current_customer.last_name} #{current_customer.first_name}"
+      when "own"
+        @order.postal_code = current_customer.postal_code
+        @order.address     = current_customer.address
+        @order.name        = "#{current_customer.last_name} #{current_customer.first_name}"
 
-    when "registered"
-      address = Address.find(params[:order][:address_id])
-      @order.postal_code = address.postal_code
-      @order.address     = address.address
-      @order.name        = address.name
+      when "registered"
+        address = Address.find(params[:order][:address_id])
+        @order.postal_code = address.postal_code
+        @order.address     = address.address
+        @order.name        = address.name
 
-    when "new"
+      when "new"
+    end
+
+    @total_price = @cart_items.sum(&:subtotal)
+    @order.postage = 800
+    @order.billing_amount = @total_price + @order.postage
   end
-
-  @total_price = @cart_items.sum(&:subtotal)
-  @order.postage = 800
-  @order.billing_amount = @total_price + @order.postage
-end
 
 
   def create
     @order = current_customer.orders.new(order_params)
+    @order.status = "waiting_for_payment"
 
     cart_items = current_customer.cart_items
 
