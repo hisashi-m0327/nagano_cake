@@ -54,15 +54,20 @@ class Public::OrdersController < ApplicationController
       end
       current_customer.cart_items.destroy_all
 
-      redirect_to public_order_path(@order)
+      redirect_to thanks_public_order_path(@order)
     else
       render :confirm
     end
   end
 
+  def thanks
+    @order = current_customer.orders.find(params[:id])
+    @order_details = @order.order_details.includes(:item)
+  end
+
   def show
     @order = current_customer.orders.find(params[:id])
-    @order_details = @order.order_details
+    @order_details = @order.order_details.includes(:item)
   end
 
   private

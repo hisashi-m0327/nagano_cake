@@ -44,7 +44,10 @@ Rails.application.routes.draw do
     resources :orders, only: [:new, :create, :show, :index] do
       collection do
         post :confirm
-      end  
+      end
+      member do
+        get :thanks
+      end
     end
 
     resources :items,  only: [:index, :show]

@@ -4,16 +4,6 @@ class Public::SessionsController < Devise::SessionsController
   before_action :customer_state, only: [:create]
 
 
-
-
-
-
-
-
-
-
-
-
   private
 
   def customer_state
