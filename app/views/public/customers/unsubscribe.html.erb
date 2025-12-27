@@ -1,0 +1,14 @@
+<div class="container mt-5 text-center">
+  <h3 class="mb-4">本当に退会しますか？</h3>
+
+  <p class="mb-4">
+    退会すると、登録情報や購入履歴が確認できなくなります。<br>
+    本当によろしいですか？
+  </p>
+
+  <div class="d-flex justify-content-center gap-3">
+    <%= link_to "退会しない",edit_public_customers_path,class: "btn btn-secondary px-4" %>
+
+    <%= link_to "退会する",withdraw_public_customers_path,method: :patch,data: { confirm: "本当に退会しますか？" },class: "btn btn-danger px-4" %>
+  </div>
+</div>

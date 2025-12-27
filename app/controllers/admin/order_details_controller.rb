@@ -3,13 +3,17 @@ class Admin::OrderDetailsController < ApplicationController
 
   def update
     order_detail = OrderDetail.find(params[:id])
-    order_detail.update(making_status: params[:order_detail][:making_status])
+    order_detail.update!(order_detail_params)
 
     order = order_detail.order
 
-    if order.payment_confirmed? &&
-      order.order_details.where(making_status: "making").exists?
+    # ① 製作中が1つでもあれば → 製作中
+    if order.order_details.where(making_status: "making").exists?
       order.update!(status: "in_production")
+
+    # ② 全て製作完了なら → 発送準備中
+    elsif order.order_details.all?(&:finished?)
+      order.update!(status: "preparing_shipment")
     end
 
     redirect_to admin_order_path(order)

@@ -34,7 +34,10 @@ Rails.application.routes.draw do
   get "about" => "public/homes#about"
 
   namespace :public do
-    resource :customers, only: [:show, :edit, :update]
+    resource :customers, only: [:show, :edit, :update] do
+      get :unsubscribe
+      patch :withdraw
+    end  
     resources :cart_items, only: [:index, :create, :update, :destroy] do
       collection do
         delete :destroy_all
